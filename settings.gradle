@@ -1,0 +1,3 @@
+include ':pesquisa'
+include ':brinquedos'
+rootProject.name = "Amostras"
