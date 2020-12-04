@@ -22,4 +22,5 @@
 
 - [aapt2](https://developer.android.com/studio/command-line/aapt2)
 - [Distribution Dashboard](https://developer.android.com/about/dashboards/index.html#Platform)
+- [Screen Compatibility](https://developer.android.com/guide/practices/screens_support.html)
 
