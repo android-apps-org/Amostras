@@ -1,3 +1,4 @@
-include ':pesquisa'
 include ':brinquedos'
+include ':clubesanduiche'
+include ':pesquisa'
 rootProject.name = "Amostras"
