@@ -10,7 +10,9 @@
 
 ## Intents Explicitos (Explicit Intents)
 
-## Pesquisa (Search)
+## Pesquisa (Search): GitHub Search
 
-## Reciclador Verde (Green Recycler)
+## Reciclador Verde (Green Recycler): RecyclerView
+
+## Visualizar (Visualizer): Preferences
 
