@@ -6,6 +6,8 @@
 
 ## Clube Sanduiche (Sandwich Club)
 
+## Esparar (SQLite3 DB)
+
 ## Intencoes Simplicitas (Implicit Intents)
 
 ## Intents Explicitos (Explicit Intents)

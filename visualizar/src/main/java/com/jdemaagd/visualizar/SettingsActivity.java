@@ -3,9 +3,7 @@ package com.jdemaagd.visualizar;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -13,12 +11,8 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        ActionBar actionBar = this.getSupportActionBar();
 
-        // Set the action bar back button to look like an up button
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -27,7 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         // When the home button is pressed, take the user back to the VisualizerActivity
         if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
+            onBackPressed();
         }
 
         return super.onOptionsItemSelected(item);
