@@ -2,7 +2,7 @@
 
 ## Threads
 
-- Android throws exception when trying to access network on main thread
+- Android throws exception (NetworkOnMainThreadException) when trying to access network on main thread
 - Each Android app can be divided into multiple threads of execution
   - that can all run concurrently
   - these threads of execution can be scheduled by OS

@@ -2,7 +2,7 @@
 
 ## Sandbox
 
-- When each APK is installed, its given its won unique linux ID
+- When each APK is installed, its given its won unique linux user ID
 - Each app runs in its own instance of Android runtime
 - Each app is completely sand-boxed
   - its files, processes, and other resources are inaccessible to other apps
