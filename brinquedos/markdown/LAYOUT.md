@@ -5,37 +5,42 @@
 - Collections of connected components
   - that work with each other
   - and with the Android Framework
+- AndroidManifest: where components are registered
 
 ## App Components
 
-- Activity
-  - responsible for most app user interaction
-  - single focused thing that a user can do
-  - responsible for creating the window that your application uses
-    - to draw and receive events from the system
-  - creates views to show user information and to let user interact with activity
-- Service
-- Broadcast Receiver
-- Content Provider
-- AndroidManifest: where components are registered
-
-## Resources
-
-- [ConstraintLayout CodeLab](https://developer.android.com/codelabs/constraint-layout#0)
-
-
-
-## Collection of Connected Components
-
 ### [Activity](https://developer.android.com/reference/android/app/Activity)
-
-- most responsible for user interaction
-- a single focused thing that user can do
-- responsible for creating window that app uses to draw and receive events from system
+- responsible for most app user interaction
+- single focused thing that a user can do
+- responsible for creating the window that your application uses
+  - to draw and receive events from the system
+- creates views to show user information and to let user interact with activity
 - from user perspective an app looks like a series of linked activities
 - system maintains activities on a stack to help preserve context for users
 
-### [Broadcast Receiver](https://developer.android.com/guide/components/broadcasts)
+### [Service](https://developer.android.com/guide/components/services)
+
+- Meant for long running background tasks
+- Great for loading and processing data in background
+- App Examples: EmailService, TextService, CalendarService
+    - services running on phone listening for and downloading data
+    - even when these Activities are closed
+- Loader: background task is loading data that is only used in Activity
+    - i.e. decoding image to use in ImageView
+    - crud-ing database used to populate recycler view adapter
+    - some network transactions: app is inherently real-time
+        - fetch data as needed in UI rather thn cache data in database
+- Prefer service when task is decoupled from UI
+    - i.e. updating database in background
+- Services hangout in background, processing, downloading, or uploading data
+    - while phone is locked
+    - or user is using unrelated apps
+- Starting Service: manually, schedule, bind
+- Job Service: to communicate back to ?
+- Bind Service: to get communication back (i.e. media player app)
+- Service can be both Bound and Started
+
+### [Broadcast Receivers](https://developer.android.com/guide/components/broadcasts)
 
 - Core Android Component that enables applications to receive intents
     - that are broadcast by the system or other applications
@@ -74,25 +79,11 @@
     - [DroidTerms Contract](http://udacity.github.io/DroidTermsExampleProvider-Documentation/)
     - [Calendar Contract](https://developer.android.com/reference/android/provider/CalendarContract.html)
 
-### [Service](https://developer.android.com/guide/components/services)
+## Resources
 
-- Meant for long running background tasks
-- Great for loading and processing data in background
-- App Examples: EmailService, TextService, CalendarService
-    - services running on phone listening for and downloading data
-    - even when these Activities are closed
-- Loader: background task is loading data that is only used in Activity
-    - i.e. decoding image to use in ImageView
-    - crud-ing database used to populate recycler view adapter
-    - some network transactions: app is inherently real-time
-        - fetch data as needed in UI rather thn cache data in database
-- Prefer service when task is decoupled from UI
-    - i.e. updating database in background
-- Services hangout in background, processing, downloading, or uploading data
-    - while phone is locked
-    - or user is using unrelated apps
-- Starting Service: manually, schedule, bind
-- Job Service: to communicate back to ?
-- Bind Service: to get communication back (i.e. media player app)
-- Service can be both Bound and Started
+- [ConstraintLayout CodeLab](https://developer.android.com/codelabs/constraint-layout#0)
+
+
+
+
 

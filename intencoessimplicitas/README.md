@@ -1,5 +1,13 @@
 # [Intents](https://developer.android.com/guide/components/intents-filters)
 
+## Uniform Resource Identifier (URI)
+
+- URL: subsets of URI
+    - specifically meant to identify network locations
+    - i.e. websites, files on web
+- URI: specifically identify or give location of some data
+    - i.e. phone
+
 ## Photo
 
 - /storage/emulated/0/Android/data/com.jdemaagd.intencoesimplicitas/files/Pictures/MainActivity
