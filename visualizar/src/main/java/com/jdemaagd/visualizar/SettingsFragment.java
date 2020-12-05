@@ -16,9 +16,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
 
     @Override
-    public void onCreatePreferences(Bundle bundle, String s) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getPreferenceScreen().getSharedPreferences()
+                .registerOnSharedPreferenceChangeListener(this);
+    }
 
-        // add visualizer preferences, defined in the XML file in res->xml->pref_visualizer
+    @Override
+    public void onCreatePreferences(Bundle bundle, String s) {
         addPreferencesFromResource(R.xml.pref_visualizer);
 
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
@@ -27,18 +32,25 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
 
         // go through all of the preferences and set up their preference summary
         for (int i = 0; i < count; i++) {
-            Preference p = prefScreen.getPreference(i);
+            Preference pref = prefScreen.getPreference(i);
             // do not need to set up preference summaries for checkbox preferences
             // because they are already set up in xml using summaryOff and summaryOn
-            if (!(p instanceof CheckBoxPreference)) {
-                String value = sharedPreferences.getString(p.getKey(), "");
-                setPreferenceSummary(p, value);
+            if (!(pref instanceof CheckBoxPreference)) {
+                String value = sharedPreferences.getString(pref.getKey(), "");
+                setPreferenceSummary(pref, value);
             }
         }
 
         // add preference listener which checks that size is correct to size preference
         Preference preference = findPreference(getString(R.string.pref_size_key));
         preference.setOnPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getPreferenceScreen().getSharedPreferences()
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -52,27 +64,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 String value = sharedPreferences.getString(preference.getKey(), "");
                 setPreferenceSummary(preference, value);
             }
-        }
-    }
-
-    /**
-     * Updates the summary for the preference
-     *
-     * @param preference The preference to be updated
-     * @param value      The value that the preference was updated to
-     */
-    private void setPreferenceSummary(Preference preference, String value) {
-        if (preference instanceof ListPreference) {
-            // for list preferences figure out the label of the selected value
-            ListPreference listPreference = (ListPreference) preference;
-            int prefIndex = listPreference.findIndexOfValue(value);
-            if (prefIndex >= 0) {
-                // set summary to that label
-                listPreference.setSummary(listPreference.getEntries()[prefIndex]);
-            }
-        } else if (preference instanceof EditTextPreference) {
-            // for EditTextPreferences set summary to value's simple string representation
-            preference.setSummary(value);
         }
     }
 
@@ -99,20 +90,28 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
                 return false;
             }
         }
+
         return true;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getPreferenceScreen().getSharedPreferences()
-                .registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getPreferenceScreen().getSharedPreferences()
-                .unregisterOnSharedPreferenceChangeListener(this);
+    /**
+     * Updates the summary for the preference
+     *
+     * @param preference The preference to be updated
+     * @param value      The value that the preference was updated to
+     */
+    private void setPreferenceSummary(Preference preference, String value) {
+        if (preference instanceof ListPreference) {
+            // for list preferences figure out the label of the selected value
+            ListPreference listPreference = (ListPreference) preference;
+            int prefIndex = listPreference.findIndexOfValue(value);
+            if (prefIndex >= 0) {
+                // set summary to that label
+                listPreference.setSummary(listPreference.getEntries()[prefIndex]);
+            }
+        } else if (preference instanceof EditTextPreference) {
+            // for EditTextPreferences set summary to value's simple string representation
+            preference.setSummary(value);
+        }
     }
 }
