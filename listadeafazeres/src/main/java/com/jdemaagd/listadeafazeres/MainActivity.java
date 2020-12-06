@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -23,7 +21,7 @@ import static android.widget.LinearLayout.VERTICAL;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemClickListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private TaskAdapter mAdapter;
@@ -71,21 +69,18 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.ItemC
         setupViewModel();
     }
 
-    private void setupViewModel() {
-        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        viewModel.getTasks().observe(this, new Observer<List<TaskEntry>>() {
-            @Override
-            public void onChanged(@Nullable List<TaskEntry> taskEntries) {
-                Log.d(TAG, "Updating list of tasks from LiveData in ViewModel");
-                mAdapter.setTasks(taskEntries);
-            }
-        });
-    }
-
     @Override
     public void onItemClickListener(int itemId) {
         Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
         intent.putExtra(AddTaskActivity.EXTRA_TASK_ID, itemId);
         startActivity(intent);
+    }
+
+    private void setupViewModel() {
+        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        viewModel.getTasks().observe(this, taskEntries -> {
+            Log.d(LOG_TAG, "Updating list of tasks from LiveData in ViewModel");
+            mAdapter.setTasks(taskEntries);
+        });
     }
 }
