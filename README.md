@@ -1,22 +1,22 @@
 # Sample Apps
 
-## Brinquedos (Toys)
+### Brinquedos (Toys)
 
-## Ciclo da Vida (Lifecycle)
+### Ciclo da Vida (Lifecycle)
 
-## Clube Sanduiche (Sandwich Club)
+### Clube Sanduiche (Sandwich Club)
 
-## Esparar (SQLite3 DB)
+### Esparar (SQLite3 DB)
 
-## Facam (TODO List): AAC
+### Lista de Afazeres (TODO List): Android Architecture Components
 
-## Intencoes Simplicitas (Implicit Intents)
+### Intencoes Simplicitas (Implicit Intents)
 
-## Intents Explicitos (Explicit Intents)
+### Intents Explicitos (Explicit Intents)
 
-## Pesquisa (Search): GitHub Search
+### Pesquisa (Search): GitHub Search
 
-## Reciclador Verde (Green Recycler): RecyclerView
+### Reciclador Verde (Green Recycler): RecyclerView
 
-## Visualizar (Visualizer): Preferences
+### Visualizar (Visualizer): Preferences
 

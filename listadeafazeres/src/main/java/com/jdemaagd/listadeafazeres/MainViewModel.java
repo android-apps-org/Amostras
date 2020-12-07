@@ -13,14 +13,14 @@ import java.util.List;
 
 public class MainViewModel extends AndroidViewModel {
 
-    private static final String TAG = MainViewModel.class.getSimpleName();
+    private static final String LOG_TAG = MainViewModel.class.getSimpleName();
 
     private LiveData<List<TaskEntry>> tasks;
 
     public MainViewModel(Application application) {
         super(application);
         AppDatabase database = AppDatabase.getInstance(this.getApplication());
-        Log.d(TAG, "Actively retrieving the tasks from the DataBase");
+        Log.d(LOG_TAG, "Actively retrieving tasks from database.");
         tasks = database.taskDao().loadAllTasks();
     }
 
