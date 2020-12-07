@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void onClickTakePhoto(View v) {
         Toast.makeText(this,
-                "TODO: Create Your Own Implicit Intent",
+                "Create Your Own Implicit Intent",
                 Toast.LENGTH_SHORT)
                 .show();
 

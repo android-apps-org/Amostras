@@ -1,7 +1,12 @@
 package com.jdemaagd.hidrato;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -13,8 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.jdemaagd.hidrato.sync.ReminderTasks;
 import com.jdemaagd.hidrato.sync.WaterReminderIntentService;
-import com.jdemaagd.hidrato.utils.NotificationUtils;
 import com.jdemaagd.hidrato.utils.PreferenceUtils;
+import com.jdemaagd.hidrato.utils.ReminderUtils;
 
 public class MainActivity extends AppCompatActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -24,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements
     private ImageView mChargingImageView;
 
     private Toast mToast;
+
+    ChargingBroadcastReceiver mChargingReceiver;
+    IntentFilter mChargingIntentFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,27 +44,67 @@ public class MainActivity extends AppCompatActivity implements
 
         updateWaterCount();
         updateChargingReminderCount();
+        ReminderUtils.scheduleChargingReminder(this);
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+
+        mChargingIntentFilter = new IntentFilter();
+        mChargingReceiver = new ChargingBroadcastReceiver();
+        mChargingIntentFilter.addAction(Intent.ACTION_POWER_CONNECTED);
+        mChargingIntentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED);
     }
 
     /**
-     * Update TextView to display new water count from SharedPreferences
+     * Listener for preference changes on water count or charging reminder counts
      */
-    private void updateWaterCount() {
-        int waterCount = PreferenceUtils.getWaterCount(this);
-        mWaterCountDisplay.setText(waterCount+"");
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (PreferenceUtils.KEY_WATER_COUNT.equals(key)) {
+            updateWaterCount();
+        } else if (PreferenceUtils.KEY_CHARGING_REMINDER_COUNT.equals(key)) {
+            updateChargingReminderCount();
+        }
     }
 
-    /**
-     * Update TextView to display new charging reminder count from SharedPreferences
-     */
-    private void updateChargingReminderCount() {
-        int chargingReminders = PreferenceUtils.getChargingReminderCount(this);
-        String formattedChargingReminders = getResources().getQuantityString(
-                R.plurals.charge_notification_count, chargingReminders, chargingReminders);
-        mChargingCountDisplay.setText(formattedChargingReminders);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mChargingReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {  // M+ (Marshmallow)
+            BatteryManager batteryManager = (BatteryManager) getSystemService(BATTERY_SERVICE);
+            showCharging(batteryManager.isCharging());
+        } else {
+            // Sticky broadcast that contains information about battery state
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+
+            // Passing in null gets current state of a sticky broadcast
+            // intent returned will contain battery information you need
+            Intent currentBatteryStatusIntent = registerReceiver(null, ifilter);
+
+            // Get BatteryManager.EXTRA_STATUS state
+            // Check against BatteryManager.BATTERY_STATUS_CHARGING or BatteryManager.BATTERY_STATUS_FULL
+            int batteryStatus = currentBatteryStatusIntent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            boolean isCharging = batteryStatus == BatteryManager.BATTERY_STATUS_CHARGING ||
+                    batteryStatus == BatteryManager.BATTERY_STATUS_FULL;
+
+            showCharging(isCharging);
+        }
+
+        registerReceiver(mChargingReceiver, mChargingIntentFilter);
     }
 
     public void incrementWater(View view) {
@@ -69,26 +117,41 @@ public class MainActivity extends AppCompatActivity implements
         startService(incrementWaterCountIntent);
     }
 
-    public void testNotification(View view) {
-        NotificationUtils.remindUserBecauseCharging(this);
-    }
+    // Update UI when our broadcast receiver is triggered when charging state changes
+    private void showCharging(boolean isCharging){
+        if (isCharging) {
+            mChargingImageView.setImageResource(R.drawable.ic_power_pink_80px);
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.unregisterOnSharedPreferenceChangeListener(this);
+        } else {
+            mChargingImageView.setImageResource(R.drawable.ic_power_grey_80px);
+        }
     }
 
     /**
-     * Listener for preference changes on water count or charging reminder counts
+     * Update TextView to display new charging reminder count from SharedPreferences
      */
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (PreferenceUtils.KEY_WATER_COUNT.equals(key)) {
-            updateWaterCount();
-        } else if (PreferenceUtils.KEY_CHARGING_REMINDER_COUNT.equals(key)) {
-            updateChargingReminderCount();
+    private void updateChargingReminderCount() {
+        int chargingReminders = PreferenceUtils.getChargingReminderCount(this);
+        String formattedChargingReminders = getResources().getQuantityString(
+                R.plurals.charge_notification_count, chargingReminders, chargingReminders);
+        mChargingCountDisplay.setText(formattedChargingReminders);
+    }
+
+    /**
+     * Update TextView to display new water count from SharedPreferences
+     */
+    private void updateWaterCount() {
+        int waterCount = PreferenceUtils.getWaterCount(this);
+        mWaterCountDisplay.setText(waterCount+"");
+    }
+
+    private class ChargingBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            boolean isCharging = (action.equals(Intent.ACTION_POWER_CONNECTED));
+
+            showCharging(isCharging);
         }
     }
 }
