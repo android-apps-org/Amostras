@@ -2,6 +2,7 @@ package com.jdemaagd.listadeafazeres;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -37,6 +38,7 @@ public class AddTaskActivity extends AppCompatActivity {
 
     private AppDatabase mDb;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
@@ -64,6 +66,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     @Override
                     public void onChanged(@Nullable TaskEntry taskEntry) {
                         viewModel.getTask().removeObserver(this);
+                        Log.d(LOG_TAG, "Receiving database update from LiveData.");
                         populateUI(taskEntry);
                     }
                 });
@@ -75,6 +78,65 @@ public class AddTaskActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putInt(INSTANCE_TASK_ID, mTaskId);
         super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * getPriority is called whenever the selected priority needs to be retrieved
+     */
+    public int getPriorityFromViews() {
+        int priority = 1;
+        int checkedId = ((RadioGroup) findViewById(R.id.radio_group)).getCheckedRadioButtonId();
+        switch (checkedId) {
+            case R.id.radio_button1:
+                priority = PRIORITY_HIGH;
+                break;
+            case R.id.radio_button2:
+                priority = PRIORITY_MEDIUM;
+                break;
+            case R.id.radio_button3:
+                priority = PRIORITY_LOW;
+        }
+
+        return priority;
+    }
+
+    /**
+     * onSaveButtonClicked is called when the "save" button is clicked
+     * It retrieves user input and inserts that new task data into the underlying database
+     */
+    public void onSaveButtonClicked() {
+        String description = mEditText.getText().toString();
+        int priority = getPriorityFromViews();
+        Date date = new Date();
+
+        final TaskEntry task = new TaskEntry(description, priority, date);
+        AppExecutors.getInstance().diskIO().execute(() -> {
+            if (mTaskId == DEFAULT_TASK_ID) {
+                mDb.taskDao().insertTask(task);
+            } else {
+                task.setId(mTaskId);
+                mDb.taskDao().updateTask(task);
+            }
+            finish();
+        });
+    }
+
+    /**
+     * setPriority is called when we receive a task from MainActivity
+     *
+     * @param priority the priority value
+     */
+    public void setPriorityInViews(int priority) {
+        switch (priority) {
+            case PRIORITY_HIGH:
+                ((RadioGroup) findViewById(R.id.radio_group)).check(R.id.radio_button1);
+                break;
+            case PRIORITY_MEDIUM:
+                ((RadioGroup) findViewById(R.id.radio_group)).check(R.id.radio_button2);
+                break;
+            case PRIORITY_LOW:
+                ((RadioGroup) findViewById(R.id.radio_group)).check(R.id.radio_button3);
+        }
     }
 
     /**
@@ -100,64 +162,5 @@ public class AddTaskActivity extends AppCompatActivity {
 
         mEditText.setText(task.getDescription());
         setPriorityInViews(task.getPriority());
-    }
-
-    /**
-     * onSaveButtonClicked is called when the "save" button is clicked
-     * It retrieves user input and inserts that new task data into the underlying database
-     */
-    public void onSaveButtonClicked() {
-        String description = mEditText.getText().toString();
-        int priority = getPriorityFromViews();
-        Date date = new Date();
-
-        final TaskEntry task = new TaskEntry(description, priority, date);
-        AppExecutors.getInstance().diskIO().execute(() -> {
-            if (mTaskId == DEFAULT_TASK_ID) {
-                mDb.taskDao().insertTask(task);
-            } else {
-                task.setId(mTaskId);
-                mDb.taskDao().updateTask(task);
-            }
-            finish();
-        });
-    }
-
-    /**
-     * getPriority is called whenever the selected priority needs to be retrieved
-     */
-    public int getPriorityFromViews() {
-        int priority = 1;
-        int checkedId = ((RadioGroup) findViewById(R.id.radio_group)).getCheckedRadioButtonId();
-        switch (checkedId) {
-            case R.id.radio_button1:
-                priority = PRIORITY_HIGH;
-                break;
-            case R.id.radio_button2:
-                priority = PRIORITY_MEDIUM;
-                break;
-            case R.id.radio_button3:
-                priority = PRIORITY_LOW;
-        }
-
-        return priority;
-    }
-
-    /**
-     * setPriority is called when we receive a task from MainActivity
-     *
-     * @param priority the priority value
-     */
-    public void setPriorityInViews(int priority) {
-        switch (priority) {
-            case PRIORITY_HIGH:
-                ((RadioGroup) findViewById(R.id.radio_group)).check(R.id.radio_button1);
-                break;
-            case PRIORITY_MEDIUM:
-                ((RadioGroup) findViewById(R.id.radio_group)).check(R.id.radio_button2);
-                break;
-            case PRIORITY_LOW:
-                ((RadioGroup) findViewById(R.id.radio_group)).check(R.id.radio_button3);
-        }
     }
 }
