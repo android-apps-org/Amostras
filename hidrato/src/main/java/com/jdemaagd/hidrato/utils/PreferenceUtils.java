@@ -3,11 +3,14 @@ package com.jdemaagd.hidrato.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 /**
  * Utility methods to update water and charging counts in SharedPreferences
  */
 public final class PreferenceUtils {
+
+    private static final String LOG_TAG = PreferenceUtils.class.getSimpleName();
 
     public static final String KEY_WATER_COUNT = "water-count";
     public static final String KEY_CHARGING_REMINDER_COUNT = "charging-reminder-count";
@@ -45,6 +48,8 @@ public final class PreferenceUtils {
     public static int getChargingReminderCount(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int chargingReminders = prefs.getInt(KEY_CHARGING_REMINDER_COUNT, DEFAULT_COUNT);
+
+        Log.i(LOG_TAG, "getChargingReminderCount");
 
         return chargingReminders;
     }

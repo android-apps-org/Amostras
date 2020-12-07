@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationCompat.Action;
@@ -25,6 +26,7 @@ import com.jdemaagd.hidrato.sync.WaterReminderIntentService;
  */
 public class NotificationUtils {
 
+    private static final String LOG_TAG = NotificationUtils.class.getSimpleName();
     /*
      * Notification ID can be used to access notification after its displayed
      * Can be handy when need to cancel notification or update it
@@ -45,6 +47,9 @@ public class NotificationUtils {
     // Create notification for charging:
     // https://developer.android.com/training/notify-user/build-notification.html
     public static void remindUserBecauseCharging(Context context) {
+
+        Log.i(LOG_TAG, "Being building notification in remindUserBecauseCharging");
+
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -75,6 +80,8 @@ public class NotificationUtils {
                 && Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             notificationBuilder.setPriority(NotificationCompat.PRIORITY_HIGH);
         }
+
+        Log.i(LOG_TAG, "Send Notification in remindUserBecauseCharging");
 
         notificationManager.notify(WATER_REMINDER_NOTIFICATION_ID, notificationBuilder.build());
     }

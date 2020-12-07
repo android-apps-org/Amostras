@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity
 
         switch (itemId) {
             case R.id.action_refresh:
-                // COMPLETED (14) Pass in this as the ListItemClickListener to the GreenAdapter constructor
                 mAdapter = new GreenAdapter(NUM_LIST_ITEMS, this);
                 mNumbersList.setAdapter(mAdapter);
+
                 return true;
         }
 
