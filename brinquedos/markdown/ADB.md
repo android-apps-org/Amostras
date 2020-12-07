@@ -21,6 +21,11 @@
 - adb shell am start -n com.package.name/com.package.name.ActivityName
 - adb shell pm list permissions -d -g
 - adb shell pm \[grant|revoke\] \<permission-name\> ...
+- adb shell am make-uid-idle <package>  (runs app in background)
+- adb shell cmd appops set <package> RUN_IN_BACKGROUND deny  (force background limitations)
+- adb shell cmd appops set <package> RUN_IN_BACKGROUND allow  (returns app to normal behavior based on target SDK)
+- adb shell dumpsys battery reset (plug in phone)
+- adb shell dumpsys battery unplug (unplug phone)
 
 ## Resources
 
