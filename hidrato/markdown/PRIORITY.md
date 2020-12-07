@@ -1,5 +1,15 @@
 # Priority
-    
+
+## Foreground Service
+
+- Service user is actively aware
+  - Android requires that service post a non-dismissible ongoing notifications
+- Typically used to show the user real-time progress of long-running operation
+- Android will prioritize foreground services
+  - even if system memory is constrained
+- Music Player that plays music long after you have navigated away from AudioPlayerActivity
+- Getting directions via Google Maps after you have closed the App
+
 ## Consider four apps below:
 
 - Which priority order would the system rank them in?

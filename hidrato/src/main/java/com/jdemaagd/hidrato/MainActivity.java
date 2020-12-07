@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.jdemaagd.hidrato.sync.ReminderTasks;
 import com.jdemaagd.hidrato.sync.WaterReminderIntentService;
+import com.jdemaagd.hidrato.utils.NotificationUtils;
 import com.jdemaagd.hidrato.utils.PreferenceUtils;
 
 public class MainActivity extends AppCompatActivity implements
@@ -66,6 +67,10 @@ public class MainActivity extends AppCompatActivity implements
         Intent incrementWaterCountIntent = new Intent(this, WaterReminderIntentService.class);
         incrementWaterCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_WATER_COUNT);
         startService(incrementWaterCountIntent);
+    }
+
+    public void testNotification(View view) {
+        NotificationUtils.remindUserBecauseCharging(this);
     }
 
     @Override
