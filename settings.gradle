@@ -1,6 +1,7 @@
 include ':brinquedos'
 include ':ciclodavida'
 include ':clubesanduiche'
+include ':embarque'
 include ':esperar'
 include ':hidrato'
 include ':intencoessimplicitas'
