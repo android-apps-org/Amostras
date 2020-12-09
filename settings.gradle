@@ -8,6 +8,7 @@ include ':intencoessimplicitas'
 include ':intentsexplicitos'
 include ':listadeafazeres'
 include ':pesquisa'
+include ':polones'
 include ':recicladorverde'
 include ':visualizar'
 rootProject.name = "Amostras"
