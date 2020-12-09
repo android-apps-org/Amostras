@@ -1,22 +1,22 @@
-# Sample Apps
+# Amostras (Samples): Android Sample Apps in Java
 
 ### Brinquedos (Toys)
 
 ### Ciclo da Vida (Lifecycle)
 
-### Clube Sanduiche (Sandwich Club)
+### Clube de Sanduíche (Sandwich Club)
 
 ### Embarque (Boarding): UI, Layouts, Binding
 
-### Esparar (SQLite3 DB)
+### Esperar (Wait): SQLite3 DB
 
-### Lista de Afazeres (TODO List): Android Architecture Components
+### Intenções Implícitas (Implicit Intents)
 
-### Intencoes Simplicitas (Implicit Intents)
-
-### Intents Explicitos (Explicit Intents)
+### Intents Explícitos (Explicit Intents)
 
 ### Hidrata (Hydrate): Notifications, BroadcastReceivers, Services
+
+### Lista de Afazeres (TODO List): Android Architecture Components
 
 ### Pesquisa (Search): GitHub Search
 
