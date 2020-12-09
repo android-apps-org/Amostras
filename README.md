@@ -20,6 +20,8 @@
 
 ### Pesquisa (Search): GitHub Search
 
+### Polones (Polish): Colors, Fonts, Styles, Touch Selectors
+
 ### Reciclador Verde (Green Recycler): RecyclerView
 
 ### Visualizar (Visualizer): Preferences
