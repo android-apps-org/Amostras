@@ -3,15 +3,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion rootProject.ext.compiledSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "com.jdemaagd.hidrato"
-        minSdkVersion 22
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,17 +29,20 @@ android {
 }
 
 dependencies {
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test:runner:$testRunnerVersion"
+    androidTestImplementation "androidx.test:rules:$testRunnerVersion"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:$androidxUIAutomatorVersion"
+    androidTestImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
 
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "androidx.core:core-ktx:$androidxCoreVersion"
+    implementation "com.firebase:firebase-jobdispatcher:$firebaseJobDispatcherVersion"
+    implementation "com.google.android.material:material:$materialDesignVersion"
+    implementation platform("com.google.firebase:firebase-bom:$firebaseBomVersion")
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.firebase:firebase-jobdispatcher:0.8.6'
-    implementation 'com.google.android.material:material:1.2.1'
-
-    implementation platform('com.google.firebase:firebase-bom:26.1.1')
-
-    testImplementation 'junit:junit:4.+'
-
+    testImplementation "junit:junit:$junitVersion"
 }
